@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -16,10 +15,9 @@ import java.util.Locale;
 
 import ru.graduatework.notes.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class PinCodeActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private int localePosition;
     private StringBuilder pinBuilder = new StringBuilder();
     public static final String PIN_KEY = "pinKey";
     public static final String PIN_SHARED_PREF_NAME = "PIN_Shared_Pref";
@@ -29,16 +27,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setTitle(R.string.notes);
         // запрещаем поворот
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         // Если после двойного нажатия кнопки назад получили ключ, то закрываем приложение
         if (getIntent().getBooleanExtra(ListOfNotesActivity.FINISH_APP_KEY, false)) finish();
 
         // выставим язык
-        SharedPreferences mySpinnersSharedPref = getSharedPreferences(SettingsActivity.SHARED_PREF_NAME, MODE_PRIVATE);
-        localePosition = mySpinnersSharedPref.getInt(SettingsActivity.LANG_SPINNER_VALUE, 0);
         onActivityCreateSetLocale();
+        this.setTitle(R.string.notes);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -47,49 +43,39 @@ public class MainActivity extends AppCompatActivity {
         // Проверка первого входа по наличию пароля
         SharedPreferences preferences = getSharedPreferences(PIN_SHARED_PREF_NAME, MODE_PRIVATE);
         String pinCode = preferences.getString(PIN_KEY, "");
-        if ("".equals(pinCode)) {
+        if (pinCode.isEmpty()) {
             // выводим нужную активность
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            Intent intent = new Intent(PinCodeActivity.this, SettingsActivity.class);
             startActivity(intent);
         }
 
-        buttonsInit();
+        deleteButtonInit();
     }
 
-    private void pinNumberButtonOnclick(Button btn) {
-        btn.setOnClickListener(v -> {
-            if (pinBuilder.length() <= 3) {
-                pinBuilder.append(btn.getText());
-                afterTextChanged(pinBuilder);
+    // Логика кнопок с цифрами
+    public void pinNumberButtonOnClick(View view) {
+        Button btn = (Button) view;
+        if (pinBuilder.length() <= 3) {
+            pinBuilder.append(btn.getText());
+            afterTextChanged(pinBuilder);
 
-                if (pinBuilder.length() == 4) {
-                    if (checkPin()) {
-                        Intent intent = new Intent(MainActivity.this, ListOfNotesActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(MainActivity.this, R.string.invalid_pin_code, Toast.LENGTH_LONG).show();
-                    }
+            if (pinBuilder.length() == 4) {
+                if (checkPin()) {
+                    Intent intent = new Intent(PinCodeActivity.this, ListOfNotesActivity.class);
+                    startActivity(intent);
+                    PinCodeActivity.this.finish();
+                } else {
+                    Toast.makeText(PinCodeActivity.this, R.string.invalid_pin_code, Toast.LENGTH_LONG).show();
                     pinBuilder.setLength(0);
                     afterTextChanged(pinBuilder);
                 }
-
             }
-        });
+
+        }
     }
 
-    private void buttonsInit() {
-
-        pinNumberButtonOnclick(binding.buttonOne);
-        pinNumberButtonOnclick(binding.buttonTwo);
-        pinNumberButtonOnclick(binding.buttonThree);
-        pinNumberButtonOnclick(binding.buttonFour);
-        pinNumberButtonOnclick(binding.buttonFive);
-        pinNumberButtonOnclick(binding.buttonSix);
-        pinNumberButtonOnclick(binding.buttonSeven);
-        pinNumberButtonOnclick(binding.buttonEight);
-        pinNumberButtonOnclick(binding.buttonNine);
-        pinNumberButtonOnclick(binding.buttonZero);
-
+    // Логика кнопки "удалить"
+    private void deleteButtonInit() {
         binding.buttonDelete.setOnClickListener(v -> {
             if (pinBuilder.length() > 0) {
                 pinBuilder.deleteCharAt(pinBuilder.length() - 1);
@@ -99,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // метод изменяет отображение кружков при вводе пароля, в зависимости от количества символов на экране
     public void afterTextChanged(StringBuilder builder) {
         switch (builder.length()) {
             case 4:
@@ -124,14 +111,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    // Проверяем соответсвтвие введёноого текста паролю, сохранённому в памяти
     private boolean checkPin() {
         SharedPreferences preferences = getSharedPreferences(PIN_SHARED_PREF_NAME, MODE_PRIVATE);
         String pinCode = preferences.getString(PIN_KEY, "");
         return pinBuilder.toString().equals(pinCode);
     }
 
+    // Метод выставляет языковые настройки по данным из памяти (предыдущему выбору пользователя)
     private void onActivityCreateSetLocale() {
+        SharedPreferences mySpinnersSharedPref = getSharedPreferences(SettingsActivity.SHARED_PREF_NAME, MODE_PRIVATE);
+        int localePosition = mySpinnersSharedPref.getInt(SettingsActivity.LANG_SPINNER_VALUE, 0);
+
         Locale localeLang;
         switch (localePosition) {
             default:

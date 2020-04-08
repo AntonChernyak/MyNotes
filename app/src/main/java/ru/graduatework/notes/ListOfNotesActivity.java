@@ -114,7 +114,7 @@ public class ListOfNotesActivity extends AppCompatActivity {
             // убираем тост, чтобы не светился после закрытия
             backToast.cancel();
             // закрываем приложение
-            Intent intent = new Intent(ListOfNotesActivity.this, MainActivity.class);
+            Intent intent = new Intent(ListOfNotesActivity.this, PinCodeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(FINISH_APP_KEY, true);
             startActivity(intent);

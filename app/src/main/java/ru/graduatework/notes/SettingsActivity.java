@@ -20,7 +20,7 @@ import java.util.Objects;
 
 import ru.graduatework.notes.databinding.ActivitySettingsBinding;
 
-import static ru.graduatework.notes.MainActivity.PIN_KEY;
+import static ru.graduatework.notes.PinCodeActivity.PIN_KEY;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -96,7 +96,7 @@ public class SettingsActivity extends AppCompatActivity {
             // установить пароль
             String pin = binding.newPinCodeEditText.getText().toString();
             if (pin.length() == 4) {
-                SharedPreferences preferences = getSharedPreferences(MainActivity.PIN_SHARED_PREF_NAME, MODE_PRIVATE);
+                SharedPreferences preferences = getSharedPreferences(PinCodeActivity.PIN_SHARED_PREF_NAME, MODE_PRIVATE);
                 preferences.edit().putString(PIN_KEY, pin).apply();
                 Toast.makeText(SettingsActivity.this, R.string.password_saved, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(SettingsActivity.this, ListOfNotesActivity.class);

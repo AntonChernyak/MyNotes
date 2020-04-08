@@ -18,7 +18,7 @@
     <string name="new_pin_code">Новый пин-код</string>
     <string name="saveBtn">Сохранить</string>
     <string name="password_visibility">Видимость пароля</string>
-    <string name="password_saved">Пие код сохранён</string>
+    <string name="password_saved">Пин код сохранён</string>
     <string name="enter_four_digits">Для нового пин кода введите 4 цифры</string>
     <string name="note_title">Заголовок заметки</string>
     <string name="noteText">Текст заметки</string>
