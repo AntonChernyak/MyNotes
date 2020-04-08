@@ -9,17 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher2_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ListOfNotesActivity"
-            android:label="@string/notes" />
+        <activity android:name=".ListOfNotesActivity" />
 
-        <activity
-            android:name=".NewNotesActivity"
-            android:label="@string/new_note" />
+        <activity android:name=".NewNotesActivity" />
 
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/settings" />
+        <activity android:name=".SettingsActivity" />
 
         <activity android:name=".MainActivity">
             <intent-filter>

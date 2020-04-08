@@ -1,6 +1,7 @@
 package ru.graduatework.notes;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
@@ -48,6 +49,7 @@ public class ListOfNotesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTitle(R.string.notes);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 
         binding = ActivityListOfNotesBinding.inflate(getLayoutInflater());
@@ -62,6 +64,21 @@ public class ListOfNotesActivity extends AppCompatActivity {
         super.onResume();
         notesList.clear();
         readNotesFromFile();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        // Если после смены языка нажали кнопку назад, то нужно пересоздать активити со списком заметок
+        SharedPreferences mySpinnersSharedPref = getSharedPreferences(SettingsActivity.SHARED_PREF_NAME, MODE_PRIVATE);
+        int oldLang  = mySpinnersSharedPref.getInt(SettingsActivity.OLD_LANG_SPINNER_VALUE, 0);
+        int newLang  = mySpinnersSharedPref.getInt(SettingsActivity.LANG_SPINNER_VALUE, 0);
+        if (oldLang != newLang) {
+            SharedPreferences.Editor mySpinnersEditor = mySpinnersSharedPref.edit();
+            mySpinnersEditor.putInt(SettingsActivity.OLD_LANG_SPINNER_VALUE, newLang);
+            mySpinnersEditor.apply();
+            recreate();
+        }
     }
 
     // обработка нажатия на fab кнопку лобавления новой заметки

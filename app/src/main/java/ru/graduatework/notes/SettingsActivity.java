@@ -6,13 +6,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.Locale;
 import java.util.Objects;
 
 import ru.graduatework.notes.databinding.ActivitySettingsBinding;
@@ -21,12 +24,22 @@ import static ru.graduatework.notes.MainActivity.PIN_KEY;
 
 public class SettingsActivity extends AppCompatActivity {
 
+
     private ActivitySettingsBinding binding;
     private boolean flag = true;
+    private Locale localeLang;
+    private SharedPreferences mySpinnersSharedPref;
+    private Spinner languageSpinner;
+
+    public static final String LANG_SPINNER_VALUE = "lang";
+    public static final String OLD_LANG_SPINNER_VALUE = "old_Lang";
+    public static final String SHARED_PREF_NAME = "MySpinner";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTitle(R.string.settings);
+        // запрещаем поворот экрана
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
@@ -37,9 +50,11 @@ public class SettingsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        initSpinner();
         onClickVisibilityButton();
         onClickSaveButton();
 
+        getDataFromSharedPref();
     }
 
     private void onClickVisibilityButton() {
@@ -62,6 +77,23 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void onClickSaveButton() {
         binding.saveButton.setOnClickListener(v -> {
+
+            // Установить язык
+            Configuration config = new Configuration();
+            config.setLocale(localeLang);
+            getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+            recreate();
+
+            int oldLang = mySpinnersSharedPref.getInt(LANG_SPINNER_VALUE, 0);
+
+            // сохраняем значения со спиннера языка
+            SharedPreferences.Editor mySpinnersEditor = mySpinnersSharedPref.edit();
+            int lang = binding.languageSpinner.getSelectedItemPosition();
+            mySpinnersEditor.putInt(LANG_SPINNER_VALUE, lang);
+            mySpinnersEditor.putInt(OLD_LANG_SPINNER_VALUE, oldLang);
+            mySpinnersEditor.apply();
+
+            // установить пароль
             String pin = binding.newPinCodeEditText.getText().toString();
             if (pin.length() == 4) {
                 SharedPreferences preferences = getSharedPreferences(MainActivity.PIN_SHARED_PREF_NAME, MODE_PRIVATE);
@@ -82,6 +114,41 @@ public class SettingsActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initSpinner() {
+        languageSpinner = binding.languageSpinner;
+        mySpinnersSharedPref = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+
+        String[] spinnerData = {getResources().getString(R.string.russian_lang), getResources().getString(R.string.english_lang)};
+        int[] images = {R.drawable.flag_rus, R.drawable.flag_en};
+
+        CustomLanguageAdapter languageAdapter = new CustomLanguageAdapter(getApplicationContext(), images, spinnerData);
+        languageSpinner.setAdapter(languageAdapter);
+        languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        localeLang = new Locale("ru");
+                        break;
+                    case 1:
+                        localeLang = new Locale("en");
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    // метод выставляет сохранённые значения на спиннер
+    private void getDataFromSharedPref() {
+        int langSaveData = mySpinnersSharedPref.getInt(LANG_SPINNER_VALUE, 0);
+        languageSpinner.setSelection(langSaveData);
     }
 
 }

@@ -39,6 +39,7 @@ public class NewNotesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTitle(R.string.new_note);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 
         binding = ActivityNewNotesBinding.inflate(getLayoutInflater());

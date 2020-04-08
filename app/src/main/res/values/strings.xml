@@ -18,8 +18,8 @@
     <string name="new_pin_code">Новый пин-код</string>
     <string name="saveBtn">Сохранить</string>
     <string name="password_visibility">Видимость пароля</string>
-    <string name="password_saved">Пароль сохранён</string>
-    <string name="enter_four_digits">Введите 4 цифры</string>
+    <string name="password_saved">Пие код сохранён</string>
+    <string name="enter_four_digits">Для нового пин кода введите 4 цифры</string>
     <string name="note_title">Заголовок заметки</string>
     <string name="noteText">Текст заметки</string>
     <string name="deadLine">Временное ограничение</string>
@@ -29,15 +29,7 @@
     <string name="note_created_successfully">Заметка создана</string>
     <string name="double_notes_notice">Заметка с таким заголовком уже существует</string>
     <string name="save_icon">saveIcon</string>
-    <string name="title_activity_list_of_notes">ListOfNotesActivity</string>
 
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="settings_icon">Settings_icon</string>
     <string name="notes">Заметки</string>
     <string name="new_note">Новая заметка</string>
@@ -47,4 +39,10 @@
     <string name="note_delete_notice">Вы уверены, что хотите удалить эту заметку?</string>
     <string name="cancel">Отмена</string>
     <string name="delete">Удалить</string>
+    <string name="country_flag">CountryFlag</string>
+    <string name="some_text">Some Text</string>
+    <string name="russian_lang">Русский</string>
+    <string name="english_lang">Английский</string>
+    <string name="choose_language">Выберите язык</string>
+    <string name="new_pin_code_hint">0000</string>
 </resources>

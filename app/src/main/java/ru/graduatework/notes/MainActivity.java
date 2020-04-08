@@ -5,28 +5,40 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import ru.graduatework.notes.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private int localePosition;
     private StringBuilder pinBuilder = new StringBuilder();
     public static final String PIN_KEY = "pinKey";
     public static final String PIN_SHARED_PREF_NAME = "PIN_Shared_Pref";
+    private final int RUS = 0;
+    private final int ENG = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTitle(R.string.notes);
+        // запрещаем поворот
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         // Если после двойного нажатия кнопки назад получили ключ, то закрываем приложение
         if (getIntent().getBooleanExtra(ListOfNotesActivity.FINISH_APP_KEY, false)) finish();
 
+        // выставим язык
+        SharedPreferences mySpinnersSharedPref = getSharedPreferences(SettingsActivity.SHARED_PREF_NAME, MODE_PRIVATE);
+        localePosition = mySpinnersSharedPref.getInt(SettingsActivity.LANG_SPINNER_VALUE, 0);
+        onActivityCreateSetLocale();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -117,5 +129,23 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(PIN_SHARED_PREF_NAME, MODE_PRIVATE);
         String pinCode = preferences.getString(PIN_KEY, "");
         return pinBuilder.toString().equals(pinCode);
+    }
+
+    private void onActivityCreateSetLocale() {
+        Locale localeLang;
+        switch (localePosition) {
+            default:
+            case RUS:
+                localeLang = new Locale("ru");
+                break;
+            case ENG:
+                localeLang = new Locale("en");
+                break;
+        }
+
+        Configuration config = new Configuration();
+        config.setLocale(localeLang);
+        getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
     }
 }
