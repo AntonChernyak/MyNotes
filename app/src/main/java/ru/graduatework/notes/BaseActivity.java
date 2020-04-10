@@ -2,6 +2,7 @@ package ru.graduatework.notes;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import static android.content.Context.MODE_PRIVATE;
 import static ru.graduatework.notes.ListOfNotesActivity.NEW_NOTE_LABEL;
 import static ru.graduatework.notes.ListOfNotesActivity.NOTES_DATA_FILE_NAME;
 
@@ -104,4 +106,17 @@ class BaseActivity {
         }
     }
 
+    // смена языка после пересоздания активити
+    void languageChange(Activity activity){
+        // Если после смены языка нажали кнопку назад, то нужно пересоздать активити со списком заметок
+        SharedPreferences mySpinnersSharedPref = activity.getSharedPreferences(SettingsActivity.SHARED_PREF_NAME, MODE_PRIVATE);
+        int oldLang  = mySpinnersSharedPref.getInt(SettingsActivity.OLD_LANG_SPINNER_VALUE, 0);
+        int newLang  = mySpinnersSharedPref.getInt(SettingsActivity.LANG_SPINNER_VALUE, 0);
+        if (oldLang != newLang) {
+            SharedPreferences.Editor mySpinnersEditor = mySpinnersSharedPref.edit();
+            mySpinnersEditor.putInt(SettingsActivity.OLD_LANG_SPINNER_VALUE, newLang);
+            mySpinnersEditor.apply();
+            activity.recreate();
+        }
+    }
 }

@@ -23,6 +23,7 @@ public class PinCodeActivity extends AppCompatActivity {
     public static final String PIN_SHARED_PREF_NAME = "PIN_Shared_Pref";
     private final int RUS = 0;
     private final int ENG = 1;
+    private boolean firstPinEnteredLabel = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +41,33 @@ public class PinCodeActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        deleteButtonInit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         // Проверка первого входа по наличию пароля
         SharedPreferences preferences = getSharedPreferences(PIN_SHARED_PREF_NAME, MODE_PRIVATE);
         String pinCode = preferences.getString(PIN_KEY, "");
         if (pinCode.isEmpty()) {
-            // выводим нужную активность
-            Intent intent = new Intent(PinCodeActivity.this, SettingsActivity.class);
-            startActivity(intent);
+            if (firstPinEnteredLabel) {
+                // выводим нужную активность
+                Intent intent = new Intent(PinCodeActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                firstPinEnteredLabel = false;
+            } else {
+                // если пользователь вернулся на этот экран и пароль до сих пор не введён, то закрываем приложение
+                finish();
+            }
         }
+    }
 
-        deleteButtonInit();
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        BaseActivity baseActivity = new BaseActivity();
+        baseActivity.languageChange(PinCodeActivity.this);
     }
 
     // Логика кнопок с цифрами

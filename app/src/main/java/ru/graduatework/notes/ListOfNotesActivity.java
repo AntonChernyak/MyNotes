@@ -1,7 +1,6 @@
 package ru.graduatework.notes;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
@@ -32,6 +31,7 @@ public class ListOfNotesActivity extends AppCompatActivity {
     private long back_pressed;
     private Toast backToast;
     private ArrayList<String> notesList = new ArrayList<>();
+    private BaseActivity baseActivity = new BaseActivity();
 
     public static final String NEW_NOTE_LABEL = "\n\n###new_notes_label###\n\n";
     public static final String FINISH_APP_KEY = "finish";
@@ -65,16 +65,7 @@ public class ListOfNotesActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        // Если после смены языка нажали кнопку назад, то нужно пересоздать активити со списком заметок
-        SharedPreferences mySpinnersSharedPref = getSharedPreferences(SettingsActivity.SHARED_PREF_NAME, MODE_PRIVATE);
-        int oldLang  = mySpinnersSharedPref.getInt(SettingsActivity.OLD_LANG_SPINNER_VALUE, 0);
-        int newLang  = mySpinnersSharedPref.getInt(SettingsActivity.LANG_SPINNER_VALUE, 0);
-        if (oldLang != newLang) {
-            SharedPreferences.Editor mySpinnersEditor = mySpinnersSharedPref.edit();
-            mySpinnersEditor.putInt(SettingsActivity.OLD_LANG_SPINNER_VALUE, newLang);
-            mySpinnersEditor.apply();
-            recreate();
-        }
+        baseActivity.languageChange(ListOfNotesActivity.this);
     }
 
     // обработка нажатия на fab кнопку лобавления новой заметки
@@ -95,7 +86,6 @@ public class ListOfNotesActivity extends AppCompatActivity {
     // Обработка клика на пункт меню
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        BaseActivity baseActivity = new BaseActivity();
         baseActivity.HandleMenu(ListOfNotesActivity.this, item);
         return super.onOptionsItemSelected(item);
     }
