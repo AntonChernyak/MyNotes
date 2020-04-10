@@ -37,15 +37,14 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/savePinButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="@string/saveBtn"
         app:layout_constraintEnd_toEndOf="@+id/visibilityImageButton"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/newPinCodeEditText"
-        app:layout_constraintTop_toBottomOf="@+id/language_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/newPinCodeEditText" />
 
     <ImageButton
         android:id="@+id/visibilityImageButton"
@@ -77,6 +76,17 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newPinCodeEditText"
+        app:layout_constraintTop_toBottomOf="@+id/savePinButton"
         tools:ignore="RtlSymmetry" />
+
+    <Button
+        android:id="@+id/saveLanguageButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/saveBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/language_spinner" />
 </androidx.constraintlayout.widget.ConstraintLayout>

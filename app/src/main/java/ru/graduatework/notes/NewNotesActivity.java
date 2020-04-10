@@ -21,10 +21,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Objects;
-import java.util.Scanner;
 
 import ru.graduatework.notes.databinding.ActivityNewNotesBinding;
 
@@ -63,20 +61,8 @@ public class NewNotesActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_save) {
-            // если изменяем заметку, то старую удалить
-            Intent intent = getIntent();
-            String noteData = intent.getStringExtra(ListOfNotesActivity.NOTE_DATA_KEY);
-            if (!"".equals(noteData)) {
-                deleteStringFromFile(noteData);
-            }
-
-            // сохранение заметки
-            saveIntoInternalStorage();
-            return false;
-        } else if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
+        BaseActivity baseActivity = new BaseActivity();
+        baseActivity.HandleMenu(NewNotesActivity.this, item);
         return super.onOptionsItemSelected(item);
     }
 
@@ -97,7 +83,6 @@ public class NewNotesActivity extends AppCompatActivity {
         });
     }
 
-
     // установка обработчика выбора даты
     private DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
         dateAndTime.set(Calendar.YEAR, year);
@@ -106,14 +91,12 @@ public class NewNotesActivity extends AppCompatActivity {
         setInitialDateTime();
     };
 
-
     // установка обработчика выбора времени
     private TimePickerDialog.OnTimeSetListener time = (view, hourOfDay, minute) -> {
         dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
         dateAndTime.set(Calendar.MINUTE, minute);
         setInitialDateTime();
     };
-
 
     // установка начальных даты и времени
     private void setInitialDateTime() {
@@ -122,7 +105,6 @@ public class NewNotesActivity extends AppCompatActivity {
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
                         | DateUtils.FORMAT_SHOW_TIME));
     }
-
 
     // Работа Deadline checkbox
     private void deadLineCheckBoxInit() {
@@ -147,7 +129,7 @@ public class NewNotesActivity extends AppCompatActivity {
     }
 
     // Запись в внутреннее хранлище
-    private void saveIntoInternalStorage() {
+    public void saveIntoInternalStorage() {
         String noteTitle = binding.noteTitleEditText.getText().toString();
         String noteText = binding.noteTextEditText.getText().toString();
         String dateAndTime = binding.dateTimeEditText.getText().toString();
@@ -185,42 +167,5 @@ public class NewNotesActivity extends AppCompatActivity {
         binding.noteTextEditText.setText(noteText);
         binding.dateTimeEditText.setText(noteDate);
     }
-
-    // удаляем строку из файла
-    private void deleteStringFromFile(String deleteStr) {
-        File temp = null;
-        PrintWriter writer = null;
-        Scanner scanner;
-        File dataFile = new File(getFilesDir(), NOTES_DATA_FILE_NAME);
-        String charset = "UTF-8";
-
-        try {
-            temp = File.createTempFile("tempDataFile", ".txt", dataFile.getParentFile());
-            writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(temp), charset));
-
-            boolean flag = true;
-            scanner = new Scanner(dataFile);
-            scanner.useDelimiter(NEW_NOTE_LABEL);
-            while (scanner.hasNext()) {
-                String line = scanner.next();
-                if (line.equals(deleteStr) && flag) {
-                    flag = false;
-                    continue;
-                }
-                writer.print(line + NEW_NOTE_LABEL);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            assert writer != null;
-            writer.close();
-        }
-
-        dataFile.delete();
-        temp.renameTo(dataFile);
-
-    }
-
 
 }

@@ -3,12 +3,11 @@ package ru.graduatework.notes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,7 +25,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     private ActivitySettingsBinding binding;
-    private boolean flag = true;
+    private boolean pinVisibilityChangeLabel = true;
     private Locale localeLang;
     private SharedPreferences mySpinnersSharedPref;
     private Spinner languageSpinner;
@@ -51,33 +50,44 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         initSpinner();
-        onClickVisibilityButton();
-        onClickSaveButton();
+        initButtons();
 
         getDataFromSharedPref();
     }
 
-    private void onClickVisibilityButton() {
+    private void initButtons() {
+        // Кнопка смены видимости пароля
         binding.visibilityImageButton.setOnClickListener(v -> {
-            if (flag) {
+            if (pinVisibilityChangeLabel) {
                 // символы видны
                 // устанавливаем иконку
                 binding.visibilityImageButton.setImageResource(R.drawable.ic_visibility_black_24dp);
                 // устанавливаем тип вводимых данных (вид, клавиатура)
-                binding.newPinCodeEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+                binding.newPinCodeEditText.setTransformationMethod(null);
             } else {
                 binding.visibilityImageButton.setImageResource(R.drawable.ic_visibility_off_black_24dp);
-                binding.newPinCodeEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                binding.newPinCodeEditText.setTransformationMethod(new PasswordTransformationMethod());
             }
-            flag = !flag;
+            pinVisibilityChangeLabel = !pinVisibilityChangeLabel;
             // переносим курсор в конец
             binding.newPinCodeEditText.setSelection(binding.newPinCodeEditText.length());
         });
-    }
 
-    private void onClickSaveButton() {
-        binding.saveButton.setOnClickListener(v -> {
+        // Кнопка сохранения пин кода
+        binding.savePinButton.setOnClickListener(v -> {
+            // установить пароль
+            String pin = binding.newPinCodeEditText.getText().toString();
+            if (pin.length() == 4) {
+                SharedPreferences preferences = getSharedPreferences(PinCodeActivity.PIN_SHARED_PREF_NAME, MODE_PRIVATE);
+                preferences.edit().putString(PIN_KEY, pin).apply();
+                Toast.makeText(SettingsActivity.this, R.string.password_saved, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(SettingsActivity.this, R.string.enter_four_digits, Toast.LENGTH_LONG).show();
+            }
+        });
 
+        // Кнопка сохранения языковых настроек
+        binding.saveLanguageButton.setOnClickListener(v -> {
             // Установить язык
             Configuration config = new Configuration();
             config.setLocale(localeLang);
@@ -92,27 +102,13 @@ public class SettingsActivity extends AppCompatActivity {
             mySpinnersEditor.putInt(LANG_SPINNER_VALUE, lang);
             mySpinnersEditor.putInt(OLD_LANG_SPINNER_VALUE, oldLang);
             mySpinnersEditor.apply();
-
-            // установить пароль
-            String pin = binding.newPinCodeEditText.getText().toString();
-            if (pin.length() == 4) {
-                SharedPreferences preferences = getSharedPreferences(PinCodeActivity.PIN_SHARED_PREF_NAME, MODE_PRIVATE);
-                preferences.edit().putString(PIN_KEY, pin).apply();
-                Toast.makeText(SettingsActivity.this, R.string.password_saved, Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(SettingsActivity.this, ListOfNotesActivity.class);
-                startActivity(intent);
-            } else {
-                Toast.makeText(SettingsActivity.this, R.string.enter_four_digits, Toast.LENGTH_LONG).show();
-            }
         });
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
-        }
+        BaseActivity baseActivity = new BaseActivity();
+        baseActivity.HandleMenu(SettingsActivity.this, item);
         return super.onOptionsItemSelected(item);
     }
 

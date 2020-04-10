@@ -18,15 +18,11 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Scanner;
 
 import ru.graduatework.notes.databinding.ActivityListOfNotesBinding;
 
@@ -99,11 +95,8 @@ public class ListOfNotesActivity extends AppCompatActivity {
     // Обработка клика на пункт меню
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            Intent intent = new Intent(ListOfNotesActivity.this, SettingsActivity.class);
-            startActivity(intent);
-            return false;
-        }
+        BaseActivity baseActivity = new BaseActivity();
+        baseActivity.HandleMenu(ListOfNotesActivity.this, item);
         return super.onOptionsItemSelected(item);
     }
 
@@ -203,7 +196,8 @@ public class ListOfNotesActivity extends AppCompatActivity {
 
         // кнопка удалить
         builder.setPositiveButton(R.string.delete, (dialog, which) -> {
-            deleteStringFromFile(notes.get(deletePosition));
+            BaseActivity baseActivity = new BaseActivity();
+            baseActivity.deleteStringFromFile(notes.get(deletePosition), ListOfNotesActivity.this);
             notes.remove(deletePosition);
             adapter.notifyDataSetChanged();
         });
@@ -213,43 +207,6 @@ public class ListOfNotesActivity extends AppCompatActivity {
 
         // покажем диалог
         builder.show();
-    }
-
-
-    // удаляем строку из файла
-    private void deleteStringFromFile(String deleteStr) {
-        File temp = null;
-        PrintWriter writer = null;
-        Scanner scanner;
-        File dataFile = new File(getFilesDir(), NOTES_DATA_FILE_NAME);
-        String charset = "UTF-8";
-
-        try {
-            temp = File.createTempFile("tempDataFile", ".txt", dataFile.getParentFile());
-            writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(temp), charset));
-
-            boolean flag = true;
-            scanner = new Scanner(dataFile);
-            scanner.useDelimiter(NEW_NOTE_LABEL);
-            while (scanner.hasNext()) {
-                String line = scanner.next();
-                if (line.equals(deleteStr) && flag) {
-                    flag = false;
-                    continue;
-                }
-                writer.print(line + NEW_NOTE_LABEL);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            assert writer != null;
-            writer.close();
-        }
-
-        dataFile.delete();
-        temp.renameTo(dataFile);
-
     }
 
     private String[] copyPartArray(String[] a, int start) {
