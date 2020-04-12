@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,24 +13,19 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
 import ru.graduatework.notes.databinding.ActivityListOfNotesBinding;
 
-public class ListOfNotesActivity extends AppCompatActivity {
+public class ListOfNotesActivity extends BaseActivity {
 
     private ActivityListOfNotesBinding binding;
     private long back_pressed;
     private Toast backToast;
     private ArrayList<String> notesList = new ArrayList<>();
-    private BaseActivity baseActivity = new BaseActivity();
 
     public static final String NEW_NOTE_LABEL = "\n\n###new_notes_label###\n\n";
     public static final String FINISH_APP_KEY = "finish";
@@ -59,13 +53,14 @@ public class ListOfNotesActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         notesList.clear();
-        readNotesFromFile();
+        initData();
+        initListView();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        baseActivity.languageChange(ListOfNotesActivity.this);
+        this.languageChange(ListOfNotesActivity.this);
     }
 
     // обработка нажатия на fab кнопку лобавления новой заметки
@@ -86,7 +81,7 @@ public class ListOfNotesActivity extends AppCompatActivity {
     // Обработка клика на пункт меню
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        baseActivity.HandleMenu(ListOfNotesActivity.this, item);
+        handleMenu(ListOfNotesActivity.this, item);
         return super.onOptionsItemSelected(item);
     }
 
@@ -108,35 +103,20 @@ public class ListOfNotesActivity extends AppCompatActivity {
         back_pressed = System.currentTimeMillis();
     }
 
-    // Чтение из файла
-    private void readNotesFromFile() {
-        File dataFile = new File(getFilesDir(), NOTES_DATA_FILE_NAME);
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(dataFile)))) {
-            // ищем файл и проверяем, файл ли это. Если да, то считываем
-            if (dataFile.isFile()) {
-
-                StringBuilder sb = new StringBuilder();
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line).append("\n");
-                }
-
-                initData(sb);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     // установим адаптер
-    private void initData(StringBuilder sb) {
-        String[] notesArray = sb.toString().split(NEW_NOTE_LABEL);
+    private void initData() {
+        File dataFile = new File(getFilesDir(), NOTES_DATA_FILE_NAME);
+        String dataString = Utils.readFileToString(dataFile);
+        String[] notesArray = dataString.split(NEW_NOTE_LABEL);
         notesList.addAll(Arrays.asList(notesArray));
+
+        if (dataString.isEmpty()) notesList.clear();
 
         Collections.sort(notesList);
         Collections.reverse(notesList);
+    }
 
+    private void initListView(){
         ListView listView = binding.listView;
         CustomAdapter adapter = new CustomAdapter(getApplicationContext(), R.layout.item_list_view, notesList);
         listView.setAdapter(adapter);
@@ -154,13 +134,12 @@ public class ListOfNotesActivity extends AppCompatActivity {
             String noteData = notesList.get(position);
             String[] noteDataArray = noteData.split("\n");
 
-            // String noteTitle = noteDataArray[0];
             String noteDate = noteDataArray[0];
             String noteTitle = "";
             String noteText = "";
             if (noteDataArray.length > 1) {
                 noteTitle = noteDataArray[1];
-                noteText = arrayToString(copyPartArray(noteDataArray, 2));
+                noteText = Utils.arrayToString(Utils.copyPartArray(noteDataArray, 2));
             }
 
             intent.putExtra(NOTE_TITLE_INTENT_KEY, noteTitle);
@@ -168,7 +147,6 @@ public class ListOfNotesActivity extends AppCompatActivity {
             intent.putExtra(NOTE_DATE_INTENT_KEY, noteDate);
             intent.putExtra(NOTE_DATA_KEY, noteData);
 
-            //deleteStringFromFile(notesList.get(position));
             startActivity(intent);
         });
 
@@ -186,8 +164,8 @@ public class ListOfNotesActivity extends AppCompatActivity {
 
         // кнопка удалить
         builder.setPositiveButton(R.string.delete, (dialog, which) -> {
-            BaseActivity baseActivity = new BaseActivity();
-            baseActivity.deleteStringFromFile(notes.get(deletePosition), ListOfNotesActivity.this);
+            File dataFile = new File(getFilesDir(), NOTES_DATA_FILE_NAME);
+            Utils.deleteStringFromFile(notes.get(deletePosition), dataFile);
             notes.remove(deletePosition);
             adapter.notifyDataSetChanged();
         });
@@ -198,23 +176,4 @@ public class ListOfNotesActivity extends AppCompatActivity {
         // покажем диалог
         builder.show();
     }
-
-    private String[] copyPartArray(String[] a, int start) {
-        if (a == null)
-            return null;
-        if (start > a.length)
-            return null;
-        String[] r = new String[a.length - start];
-        System.arraycopy(a, start, r, 0, a.length - start);
-        return r;
-    }
-
-    private String arrayToString(String[] arr) {
-        StringBuilder sb = new StringBuilder();
-        for (String s : arr) {
-            sb.append(s).append("\n");
-        }
-        return sb.toString();
-    }
-
 }

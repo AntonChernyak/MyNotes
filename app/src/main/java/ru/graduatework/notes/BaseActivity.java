@@ -1,5 +1,6 @@
 package ru.graduatework.notes;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,22 +9,21 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.Scanner;
 
-import static android.content.Context.MODE_PRIVATE;
 import static ru.graduatework.notes.ListOfNotesActivity.NEW_NOTE_LABEL;
 import static ru.graduatework.notes.ListOfNotesActivity.NOTES_DATA_FILE_NAME;
 
-class BaseActivity {
+@SuppressLint("Registered")
+class BaseActivity extends AppCompatActivity {
 
-    void HandleMenu(Activity activity, @NonNull MenuItem item) {
+    void handleMenu(Activity activity, @NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 activity.finish();
@@ -33,7 +33,8 @@ class BaseActivity {
                 Intent intent = activity.getIntent();
                 String noteData = intent.getStringExtra(ListOfNotesActivity.NOTE_DATA_KEY);
                 if (!"".equals(noteData)) {
-                    deleteStringFromFile(noteData, activity);
+                    File dataFile = new File(activity.getFilesDir(), NOTES_DATA_FILE_NAME);
+                    Utils.deleteStringFromFile(noteData, dataFile);
                 }
                 // сохранение заметки
                 saveIntoInternalStorage(activity);
@@ -42,42 +43,6 @@ class BaseActivity {
                 Intent intent2 = new Intent(activity, SettingsActivity.class);
                 activity.startActivity(intent2);
         }
-    }
-
-    // удаляем строку из файла
-    void deleteStringFromFile(String deleteStr, Activity activity) {
-        File temp = null;
-        PrintWriter writer = null;
-        Scanner scanner;
-        File dataFile = new File(activity.getFilesDir(), NOTES_DATA_FILE_NAME);
-        String charset = "UTF-8";
-
-        try {
-            temp = File.createTempFile("tempDataFile", ".txt", dataFile.getParentFile());
-            writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(temp), charset));
-
-            boolean flag = true;
-            scanner = new Scanner(dataFile);
-            scanner.useDelimiter(NEW_NOTE_LABEL);
-            while (scanner.hasNext()) {
-                String line = scanner.next();
-                if (line.equals(deleteStr) && flag) {
-                    flag = false;
-                    continue;
-                }
-                writer.print(line + NEW_NOTE_LABEL);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            assert writer != null;
-            writer.close();
-        }
-
-        dataFile.delete();
-        temp.renameTo(dataFile);
-
     }
 
     // Запись в внутреннее хранилище
@@ -107,11 +72,11 @@ class BaseActivity {
     }
 
     // смена языка после пересоздания активити
-    void languageChange(Activity activity){
+    void languageChange(Activity activity) {
         // Если после смены языка нажали кнопку назад, то нужно пересоздать активити со списком заметок
         SharedPreferences mySpinnersSharedPref = activity.getSharedPreferences(SettingsActivity.SHARED_PREF_NAME, MODE_PRIVATE);
-        int oldLang  = mySpinnersSharedPref.getInt(SettingsActivity.OLD_LANG_SPINNER_VALUE, 0);
-        int newLang  = mySpinnersSharedPref.getInt(SettingsActivity.LANG_SPINNER_VALUE, 0);
+        int oldLang = mySpinnersSharedPref.getInt(SettingsActivity.OLD_LANG_SPINNER_VALUE, 0);
+        int newLang = mySpinnersSharedPref.getInt(SettingsActivity.LANG_SPINNER_VALUE, 0);
         if (oldLang != newLang) {
             SharedPreferences.Editor mySpinnersEditor = mySpinnersSharedPref.edit();
             mySpinnersEditor.putInt(SettingsActivity.OLD_LANG_SPINNER_VALUE, newLang);

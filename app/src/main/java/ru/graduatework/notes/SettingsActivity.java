@@ -1,7 +1,6 @@
 package ru.graduatework.notes;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -21,7 +20,7 @@ import ru.graduatework.notes.databinding.ActivitySettingsBinding;
 
 import static ru.graduatework.notes.PinCodeActivity.PIN_KEY;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
 
 
     private ActivitySettingsBinding binding;
@@ -107,8 +106,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        BaseActivity baseActivity = new BaseActivity();
-        baseActivity.HandleMenu(SettingsActivity.this, item);
+        handleMenu(SettingsActivity.this, item);
         return super.onOptionsItemSelected(item);
     }
 

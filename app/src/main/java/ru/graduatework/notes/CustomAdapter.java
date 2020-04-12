@@ -37,29 +37,11 @@ public class CustomAdapter extends ArrayAdapter<String> {
             nodeDate.setText(noteDataArray[0]);
             if (noteDataArray.length > 1) {
                 noteTitle.setText(noteDataArray[1]);
-                noteText.setText(arrayToString(copyPartArray(noteDataArray, 2)));
+                noteText.setText(Utils.arrayToString(Utils.copyPartArray(noteDataArray, 2)));
             }
         }
 
         return convertView;
-    }
-
-    private String[] copyPartArray(String[] a, int start) {
-        if (a == null)
-            return null;
-        if (start > a.length)
-            return null;
-        String[] r = new String[a.length - start];
-        System.arraycopy(a, start, r, 0, a.length - start);
-        return r;
-    }
-
-    private String arrayToString(String[] arr) {
-        StringBuilder sb = new StringBuilder();
-        for (String s : arr) {
-            sb.append(s).append("\n");
-        }
-        return sb.toString();
     }
 
 }

@@ -1,7 +1,5 @@
 package ru.graduatework.notes;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -15,7 +13,7 @@ import java.util.Locale;
 
 import ru.graduatework.notes.databinding.ActivityMainBinding;
 
-public class PinCodeActivity extends AppCompatActivity {
+public class PinCodeActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
     private StringBuilder pinBuilder = new StringBuilder();
@@ -66,8 +64,7 @@ public class PinCodeActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        BaseActivity baseActivity = new BaseActivity();
-        baseActivity.languageChange(PinCodeActivity.this);
+        languageChange(PinCodeActivity.this);
     }
 
     // Логика кнопок с цифрами

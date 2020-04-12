@@ -1,7 +1,6 @@
 package ru.graduatework.notes;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -29,7 +28,7 @@ import ru.graduatework.notes.databinding.ActivityNewNotesBinding;
 import static ru.graduatework.notes.ListOfNotesActivity.NEW_NOTE_LABEL;
 import static ru.graduatework.notes.ListOfNotesActivity.NOTES_DATA_FILE_NAME;
 
-public class NewNotesActivity extends AppCompatActivity {
+public class NewNotesActivity extends BaseActivity {
 
     private ActivityNewNotesBinding binding;
     Calendar dateAndTime = Calendar.getInstance();
@@ -61,8 +60,7 @@ public class NewNotesActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        BaseActivity baseActivity = new BaseActivity();
-        baseActivity.HandleMenu(NewNotesActivity.this, item);
+        handleMenu(NewNotesActivity.this, item);
         return super.onOptionsItemSelected(item);
     }
 
