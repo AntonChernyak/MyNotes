@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListOfNotesActivity">
+    tools:context=".activities.ListOfNotesActivity">
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".ListOfNotesActivity"
+        tools:context=".activities.ListOfNotesActivity"
         tools:listitem="@layout/item_list_view"
         tools:showIn="@layout/activity_list_of_notes" />
 

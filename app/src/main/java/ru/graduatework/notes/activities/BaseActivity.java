@@ -1,4 +1,4 @@
-package ru.graduatework.notes;
+package ru.graduatework.notes.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,8 +17,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-import static ru.graduatework.notes.ListOfNotesActivity.NEW_NOTE_LABEL;
-import static ru.graduatework.notes.ListOfNotesActivity.NOTES_DATA_FILE_NAME;
+import ru.graduatework.notes.R;
+import ru.graduatework.notes.utils.Utils;
+
+import static ru.graduatework.notes.activities.ListOfNotesActivity.NEW_NOTE_LABEL;
+import static ru.graduatework.notes.activities.ListOfNotesActivity.NOTES_DATA_FILE_NAME;
 
 @SuppressLint("Registered")
 class BaseActivity extends AppCompatActivity {

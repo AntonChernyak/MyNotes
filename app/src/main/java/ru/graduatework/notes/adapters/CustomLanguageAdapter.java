@@ -1,4 +1,4 @@
-package ru.graduatework.notes;
+package ru.graduatework.notes.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,17 +9,18 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import ru.graduatework.notes.R;
 
 public class CustomLanguageAdapter extends BaseAdapter {
 
     private int[] images;
     private String[] languages;
-    private LayoutInflater inflter;
+    private LayoutInflater inflater;
 
-    CustomLanguageAdapter(Context applicationContext, int[] flags, String[] fruit) {
+    public CustomLanguageAdapter(Context applicationContext, int[] flags, String[] fruit) {
         this.images = flags;
         this.languages = fruit;
-        inflter = (LayoutInflater.from(applicationContext));
+        inflater = (LayoutInflater.from(applicationContext));
     }
 
     @Override
@@ -40,7 +41,7 @@ public class CustomLanguageAdapter extends BaseAdapter {
     @SuppressLint({"ViewHolder", "InflateParams"})
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        view = inflter.inflate(R.layout.spinner_custom_layout, null);
+        view = inflater.inflate(R.layout.spinner_custom_layout, null);
         ImageView icon = view.findViewById(R.id.imageView);
         TextView names = view.findViewById(R.id.textView);
         icon.setImageResource(images[i]);

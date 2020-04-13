@@ -1,4 +1,4 @@
-package ru.graduatework.notes;
+package ru.graduatework.notes.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,7 +10,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import static ru.graduatework.notes.ListOfNotesActivity.NEW_NOTE_LABEL;
+import static ru.graduatework.notes.activities.ListOfNotesActivity.NEW_NOTE_LABEL;
 
 public class Utils {
 
@@ -87,4 +87,3 @@ public class Utils {
     }
 
 }
-

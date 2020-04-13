@@ -1,4 +1,4 @@
-package ru.graduatework.notes;
+package ru.graduatework.notes.activities;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import ru.graduatework.notes.adapters.CustomAdapter;
+import ru.graduatework.notes.R;
+import ru.graduatework.notes.utils.Utils;
 import ru.graduatework.notes.databinding.ActivityListOfNotesBinding;
 
 public class ListOfNotesActivity extends BaseActivity {
@@ -92,10 +95,7 @@ public class ListOfNotesActivity extends BaseActivity {
             // убираем тост, чтобы не светился после закрытия
             backToast.cancel();
             // закрываем приложение
-            Intent intent = new Intent(ListOfNotesActivity.this, PinCodeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra(FINISH_APP_KEY, true);
-            startActivity(intent);
+            super.onBackPressed();
         } else {
             backToast = Toast.makeText(getBaseContext(), R.string.double_back_pressed, Toast.LENGTH_SHORT);
             backToast.show();
@@ -116,7 +116,7 @@ public class ListOfNotesActivity extends BaseActivity {
         Collections.reverse(notesList);
     }
 
-    private void initListView(){
+    private void initListView() {
         ListView listView = binding.listView;
         CustomAdapter adapter = new CustomAdapter(getApplicationContext(), R.layout.item_list_view, notesList);
         listView.setAdapter(adapter);

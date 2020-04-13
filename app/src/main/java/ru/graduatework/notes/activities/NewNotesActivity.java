@@ -1,4 +1,4 @@
-package ru.graduatework.notes;
+package ru.graduatework.notes.activities;
 
 import androidx.annotation.NonNull;
 
@@ -13,20 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.Calendar;
 import java.util.Objects;
 
+import ru.graduatework.notes.R;
 import ru.graduatework.notes.databinding.ActivityNewNotesBinding;
-
-import static ru.graduatework.notes.ListOfNotesActivity.NEW_NOTE_LABEL;
-import static ru.graduatework.notes.ListOfNotesActivity.NOTES_DATA_FILE_NAME;
 
 public class NewNotesActivity extends BaseActivity {
 
@@ -124,28 +116,6 @@ public class NewNotesActivity extends BaseActivity {
 
             }
         });
-    }
-
-    // Запись в внутреннее хранлище
-    public void saveIntoInternalStorage() {
-        String noteTitle = binding.noteTitleEditText.getText().toString();
-        String noteText = binding.noteTextEditText.getText().toString();
-        String dateAndTime = binding.dateTimeEditText.getText().toString();
-
-        if ("".equals(noteTitle) && "".equals(noteText) && "".equals(dateAndTime)) {
-            Toast.makeText(this, R.string.empty_fields_notice, Toast.LENGTH_LONG).show();
-        } else {
-            File file = new File(getFilesDir(), NOTES_DATA_FILE_NAME);
-            // если файла не существует, то пишем
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true)))) {
-                writer.append(dateAndTime).append("\n");
-                writer.append(noteTitle).append("\n");
-                writer.append(noteText).append(NEW_NOTE_LABEL);
-                Toast.makeText(NewNotesActivity.this, R.string.note_created_successfully, Toast.LENGTH_LONG).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     // получим данные из интента

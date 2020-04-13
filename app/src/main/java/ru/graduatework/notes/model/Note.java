@@ -1,23 +1,23 @@
-package ru.graduatework.notes;
+package ru.graduatework.notes.model;
 
 public class Note {
-    private String id;
+    private int id;
     private String title;
     private String text;
     private String date;
 
-    public Note(String id, String title, String text, String date) {
+    public Note(int id, String title, String text, String date) {
         this.id = id;
         this.title = title;
         this.text = text;
         this.date = date;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -1,4 +1,4 @@
-package ru.graduatework.notes;
+package ru.graduatework.notes.activities;
 
 import androidx.annotation.NonNull;
 
@@ -6,22 +6,23 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.method.PasswordTransformationMethod;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.Locale;
 import java.util.Objects;
 
+import ru.graduatework.notes.App;
+import ru.graduatework.notes.adapters.CustomLanguageAdapter;
+import ru.graduatework.notes.R;
 import ru.graduatework.notes.databinding.ActivitySettingsBinding;
 
-import static ru.graduatework.notes.PinCodeActivity.PIN_KEY;
 
 public class SettingsActivity extends BaseActivity {
-
 
     private ActivitySettingsBinding binding;
     private boolean pinVisibilityChangeLabel = true;
@@ -76,13 +77,7 @@ public class SettingsActivity extends BaseActivity {
         binding.savePinButton.setOnClickListener(v -> {
             // установить пароль
             String pin = binding.newPinCodeEditText.getText().toString();
-            if (pin.length() == 4) {
-                SharedPreferences preferences = getSharedPreferences(PinCodeActivity.PIN_SHARED_PREF_NAME, MODE_PRIVATE);
-                preferences.edit().putString(PIN_KEY, pin).apply();
-                Toast.makeText(SettingsActivity.this, R.string.password_saved, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(SettingsActivity.this, R.string.enter_four_digits, Toast.LENGTH_LONG).show();
-            }
+            App.getKeystore().saveNew(pin);
         });
 
         // Кнопка сохранения языковых настроек
@@ -91,7 +86,7 @@ public class SettingsActivity extends BaseActivity {
             Configuration config = new Configuration();
             config.setLocale(localeLang);
             getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-            recreate();
+            SettingsActivity.this.recreate();
 
             int oldLang = mySpinnersSharedPref.getInt(LANG_SPINNER_VALUE, 0);
 

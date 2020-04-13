@@ -1,4 +1,4 @@
-package ru.graduatework.notes;
+package ru.graduatework.notes.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,14 +11,14 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
+import ru.graduatework.notes.App;
+import ru.graduatework.notes.R;
 import ru.graduatework.notes.databinding.ActivityMainBinding;
 
 public class PinCodeActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
     private StringBuilder pinBuilder = new StringBuilder();
-    public static final String PIN_KEY = "pinKey";
-    public static final String PIN_SHARED_PREF_NAME = "PIN_Shared_Pref";
     private final int RUS = 0;
     private final int ENG = 1;
     private boolean firstPinEnteredLabel = true;
@@ -28,8 +28,6 @@ public class PinCodeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // запрещаем поворот
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-        // Если после двойного нажатия кнопки назад получили ключ, то закрываем приложение
-        if (getIntent().getBooleanExtra(ListOfNotesActivity.FINISH_APP_KEY, false)) finish();
 
         // выставим язык
         onActivityCreateSetLocale();
@@ -46,14 +44,12 @@ public class PinCodeActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         // Проверка первого входа по наличию пароля
-        SharedPreferences preferences = getSharedPreferences(PIN_SHARED_PREF_NAME, MODE_PRIVATE);
-        String pinCode = preferences.getString(PIN_KEY, "");
-        if (pinCode.isEmpty()) {
+        if (App.getKeystore().checkPin("")) {
             if (firstPinEnteredLabel) {
                 // выводим нужную активность
+                firstPinEnteredLabel = false;
                 Intent intent = new Intent(PinCodeActivity.this, SettingsActivity.class);
                 startActivity(intent);
-                firstPinEnteredLabel = false;
             } else {
                 // если пользователь вернулся на этот экран и пароль до сих пор не введён, то закрываем приложение
                 finish();
@@ -75,7 +71,7 @@ public class PinCodeActivity extends BaseActivity {
             afterTextChanged(pinBuilder);
 
             if (pinBuilder.length() == 4) {
-                if (checkPin()) {
+                if (App.getKeystore().checkPin(pinBuilder.toString())) {
                     Intent intent = new Intent(PinCodeActivity.this, ListOfNotesActivity.class);
                     startActivity(intent);
                     PinCodeActivity.this.finish();
@@ -97,7 +93,6 @@ public class PinCodeActivity extends BaseActivity {
                 afterTextChanged(pinBuilder);
             }
         });
-
     }
 
     // метод изменяет отображение кружков при вводе пароля, в зависимости от количества символов на экране
@@ -124,13 +119,6 @@ public class PinCodeActivity extends BaseActivity {
                 binding.pinCircleThird.setImageResource(R.drawable.circle_empty);
                 binding.pinCircleFourth.setImageResource(R.drawable.circle_empty);
         }
-    }
-
-    // Проверяем соответсвтвие введёноого текста паролю, сохранённому в памяти
-    private boolean checkPin() {
-        SharedPreferences preferences = getSharedPreferences(PIN_SHARED_PREF_NAME, MODE_PRIVATE);
-        String pinCode = preferences.getString(PIN_KEY, "");
-        return pinBuilder.toString().equals(pinCode);
     }
 
     // Метод выставляет языковые настройки по данным из памяти (предыдущему выбору пользователя)

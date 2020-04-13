@@ -1,4 +1,4 @@
-package ru.graduatework.notes;
+package ru.graduatework.notes.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,12 +9,15 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import ru.graduatework.notes.R;
+import ru.graduatework.notes.utils.Utils;
+
 
 public class CustomAdapter extends ArrayAdapter<String> {
 
     private LayoutInflater inflater;
 
-    CustomAdapter(Context context, int resource, ArrayList<String> items) {
+    public CustomAdapter(Context context, int resource, ArrayList<String> items) {
         super(context, resource, items);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
