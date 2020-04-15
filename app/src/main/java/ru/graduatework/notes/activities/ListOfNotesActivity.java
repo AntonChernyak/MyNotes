@@ -13,14 +13,10 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
+import ru.graduatework.notes.App;
 import ru.graduatework.notes.adapters.CustomAdapter;
 import ru.graduatework.notes.R;
-import ru.graduatework.notes.utils.Utils;
+import ru.graduatework.notes.model.Note;
 import ru.graduatework.notes.databinding.ActivityListOfNotesBinding;
 
 public class ListOfNotesActivity extends BaseActivity {
@@ -28,16 +24,10 @@ public class ListOfNotesActivity extends BaseActivity {
     private ActivityListOfNotesBinding binding;
     private long back_pressed;
     private Toast backToast;
-    private ArrayList<String> notesList = new ArrayList<>();
-
-    public static final String NEW_NOTE_LABEL = "\n\n###new_notes_label###\n\n";
-    public static final String FINISH_APP_KEY = "finish";
     public static final String NOTE_TITLE_INTENT_KEY = "note_title";
     public static final String NOTE_TEXT_INTENT_KEY = "note_text";
     public static final String NOTE_DATE_INTENT_KEY = "note_date";
-    public static final String NOTES_DATA_FILE_NAME = "notes_data";
-    public static final String NOTE_DATA_KEY = "note_data";
-
+    public static final String NOTE_ID_KEY = "note_id_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +38,12 @@ public class ListOfNotesActivity extends BaseActivity {
         binding = ActivityListOfNotesBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
         addNotesFabButtonOnClick();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        notesList.clear();
-        initData();
         initListView();
     }
 
@@ -103,27 +90,17 @@ public class ListOfNotesActivity extends BaseActivity {
         back_pressed = System.currentTimeMillis();
     }
 
-    // установим адаптер
-    private void initData() {
-        File dataFile = new File(getFilesDir(), NOTES_DATA_FILE_NAME);
-        String dataString = Utils.readFileToString(dataFile);
-        String[] notesArray = dataString.split(NEW_NOTE_LABEL);
-        notesList.addAll(Arrays.asList(notesArray));
-
-        if (dataString.isEmpty()) notesList.clear();
-
-        Collections.sort(notesList);
-        Collections.reverse(notesList);
-    }
 
     private void initListView() {
         ListView listView = binding.listView;
-        CustomAdapter adapter = new CustomAdapter(getApplicationContext(), R.layout.item_list_view, notesList);
+        // установим адаптер
+        CustomAdapter adapter = new CustomAdapter(getApplicationContext(), R.layout.item_list_view, App.getNoteRepository().getNotes());
         listView.setAdapter(adapter);
 
         // обработаем долгое нажатие на элемент списка
         listView.setOnItemLongClickListener((arg0, arg1, pos, id) -> {
-            addItemDialog(notesList, pos, adapter);
+            Note note = App.getNoteRepository().getNotes().get(pos);
+            addItemDialog(note.getId(), adapter);
             return true;
         });
 
@@ -131,21 +108,12 @@ public class ListOfNotesActivity extends BaseActivity {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(ListOfNotesActivity.this, NewNotesActivity.class);
 
-            String noteData = notesList.get(position);
-            String[] noteDataArray = noteData.split("\n");
+            Note note = App.getNoteRepository().getNotes().get(position);
 
-            String noteDate = noteDataArray[0];
-            String noteTitle = "";
-            String noteText = "";
-            if (noteDataArray.length > 1) {
-                noteTitle = noteDataArray[1];
-                noteText = Utils.arrayToString(Utils.copyPartArray(noteDataArray, 2));
-            }
-
-            intent.putExtra(NOTE_TITLE_INTENT_KEY, noteTitle);
-            intent.putExtra(NOTE_TEXT_INTENT_KEY, noteText);
-            intent.putExtra(NOTE_DATE_INTENT_KEY, noteDate);
-            intent.putExtra(NOTE_DATA_KEY, noteData);
+            intent.putExtra(NOTE_TITLE_INTENT_KEY, note.getTitle());
+            intent.putExtra(NOTE_TEXT_INTENT_KEY, note.getText());
+            intent.putExtra(NOTE_DATE_INTENT_KEY, note.getDate());
+            intent.putExtra(NOTE_ID_KEY, note.getId());
 
             startActivity(intent);
         });
@@ -153,7 +121,7 @@ public class ListOfNotesActivity extends BaseActivity {
     }
 
     // Добавим диалог для долгого нажатия на элемент списка
-    private void addItemDialog(ArrayList<String> notes, int deletePosition, CustomAdapter adapter) {
+    private void addItemDialog(int id, CustomAdapter adapter) {
         String title = getString(R.string.attention);
         String message = getString(R.string.note_delete_notice);
 
@@ -164,10 +132,9 @@ public class ListOfNotesActivity extends BaseActivity {
 
         // кнопка удалить
         builder.setPositiveButton(R.string.delete, (dialog, which) -> {
-            File dataFile = new File(getFilesDir(), NOTES_DATA_FILE_NAME);
-            Utils.deleteStringFromFile(notes.get(deletePosition), dataFile);
-            notes.remove(deletePosition);
+            App.getNoteRepository().deleteById(id);
             adapter.notifyDataSetChanged();
+            recreate();
         });
 
         // кнопка отмена

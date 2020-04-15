@@ -2,6 +2,7 @@ package ru.graduatework.notes;
 
 import android.app.Application;
 
+import ru.graduatework.notes.repositories.FileNoteRepository;
 import ru.graduatework.notes.repositories.Keystore;
 import ru.graduatework.notes.repositories.NoteRepository;
 import ru.graduatework.notes.repositories.SimpleKeystore;
@@ -15,16 +16,16 @@ public class App extends Application {
         super.onCreate();
 
         // Конкретная реализация выбирается только здесь.
-        // noteRepository = new FileNoteRepository(this);
+        noteRepository = new FileNoteRepository(this);
         keystore = new SimpleKeystore(this);
     }
 
-    // Возвращаем интерфейс, а не конкретную реализацию!
+    // Возвращаем интерфейс, а не конкретную реализацию
     public static NoteRepository getNoteRepository() {
         return noteRepository;
     }
 
-    // Возвращаем интерфейс, а не конкретную реализацию!
+    // Возвращаем интерфейс, а не конкретную реализацию
     public static Keystore getKeystore() {
         return keystore;
     }

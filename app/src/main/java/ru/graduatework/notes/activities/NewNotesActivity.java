@@ -2,18 +2,19 @@ package ru.graduatework.notes.activities;
 
 import androidx.annotation.NonNull;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -88,12 +89,11 @@ public class NewNotesActivity extends BaseActivity {
         setInitialDateTime();
     };
 
-    // установка начальных даты и времени
+    // установка даты и времени
     private void setInitialDateTime() {
-        binding.dateTimeEditText.setText(DateUtils.formatDateTime(this,
-                dateAndTime.getTimeInMillis(),
-                DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
-                        | DateUtils.FORMAT_SHOW_TIME));
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-y, HH:mm");
+        binding.dateTimeEditText.setText(dateFormat.format(dateAndTime.getTimeInMillis()));
     }
 
     // Работа Deadline checkbox
@@ -124,8 +124,8 @@ public class NewNotesActivity extends BaseActivity {
         String noteTitle = intent.getStringExtra(ListOfNotesActivity.NOTE_TITLE_INTENT_KEY);
         String noteText = intent.getStringExtra(ListOfNotesActivity.NOTE_TEXT_INTENT_KEY);
         String noteDate = intent.getStringExtra(ListOfNotesActivity.NOTE_DATE_INTENT_KEY);
+
         if (!"".equals(noteDate) && noteDate != null) {
-            System.out.println(noteDate);
             binding.deadLineCheckBox.setChecked(true);
             binding.calendarImageButton.setEnabled(true);
             binding.dateTimeEditText.setEnabled(true);

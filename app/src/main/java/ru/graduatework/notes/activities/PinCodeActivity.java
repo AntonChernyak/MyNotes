@@ -1,15 +1,11 @@
 package ru.graduatework.notes.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.util.Locale;
 
 import ru.graduatework.notes.App;
 import ru.graduatework.notes.R;
@@ -19,8 +15,6 @@ public class PinCodeActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
     private StringBuilder pinBuilder = new StringBuilder();
-    private final int RUS = 0;
-    private final int ENG = 1;
     private boolean firstPinEnteredLabel = true;
 
     @Override
@@ -36,7 +30,6 @@ public class PinCodeActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
         deleteButtonInit();
     }
 
@@ -121,25 +114,4 @@ public class PinCodeActivity extends BaseActivity {
         }
     }
 
-    // Метод выставляет языковые настройки по данным из памяти (предыдущему выбору пользователя)
-    private void onActivityCreateSetLocale() {
-        SharedPreferences mySpinnersSharedPref = getSharedPreferences(SettingsActivity.SHARED_PREF_NAME, MODE_PRIVATE);
-        int localePosition = mySpinnersSharedPref.getInt(SettingsActivity.LANG_SPINNER_VALUE, 0);
-
-        Locale localeLang;
-        switch (localePosition) {
-            default:
-            case RUS:
-                localeLang = new Locale("ru");
-                break;
-            case ENG:
-                localeLang = new Locale("en");
-                break;
-        }
-
-        Configuration config = new Configuration();
-        config.setLocale(localeLang);
-        getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-
-    }
 }

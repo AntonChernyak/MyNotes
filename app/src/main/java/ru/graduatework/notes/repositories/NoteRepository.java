@@ -11,5 +11,5 @@ public interface NoteRepository {
 
     void saveNote(Note note);
 
-    void deleteById(String id);
+    void deleteById(int id);
 }

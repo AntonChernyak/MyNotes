@@ -7,17 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import ru.graduatework.notes.R;
-import ru.graduatework.notes.utils.Utils;
+import ru.graduatework.notes.model.Note;
 
-
-public class CustomAdapter extends ArrayAdapter<String> {
+public class CustomAdapter extends ArrayAdapter<Note> {
 
     private LayoutInflater inflater;
 
-    public CustomAdapter(Context context, int resource, ArrayList<String> items) {
+    public CustomAdapter(Context context, int resource, List<Note> items) {
         super(context, resource, items);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -28,20 +27,16 @@ public class CustomAdapter extends ArrayAdapter<String> {
             convertView = inflater.inflate(R.layout.item_list_view, parent, false);
         }
 
-        String noteData = getItem(position);
+        Note note = getItem(position);
 
         TextView noteTitle = convertView.findViewById(R.id.item_note_title);
         TextView noteText = convertView.findViewById(R.id.item_note_text);
         TextView nodeDate = convertView.findViewById(R.id.item_date);
 
-        if (noteData != null) {
-            String[] noteDataArray = noteData.split("\n");
-
-            nodeDate.setText(noteDataArray[0]);
-            if (noteDataArray.length > 1) {
-                noteTitle.setText(noteDataArray[1]);
-                noteText.setText(Utils.arrayToString(Utils.copyPartArray(noteDataArray, 2)));
-            }
+        if (note != null) {
+            noteTitle.setText(note.getTitle());
+            noteText.setText(note.getText());
+            nodeDate.setText(note.getDate());
         }
 
         return convertView;

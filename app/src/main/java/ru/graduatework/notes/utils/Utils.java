@@ -3,14 +3,8 @@ package ru.graduatework.notes.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.Scanner;
-
-import static ru.graduatework.notes.activities.ListOfNotesActivity.NEW_NOTE_LABEL;
 
 public class Utils {
 
@@ -49,41 +43,6 @@ public class Utils {
             e.printStackTrace();
         }
         return "";
-    }
-
-    // удаляем строку из файла
-    public static void deleteStringFromFile(String deleteStr, File dataFile) {
-        File temp = null;
-        PrintWriter writer = null;
-        Scanner scanner;
-        String charset = "UTF-8";
-
-        try {
-            temp = File.createTempFile("tempDataFile", ".txt", dataFile.getParentFile());
-            writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(temp), charset));
-
-            boolean flag = true;
-            scanner = new Scanner(dataFile);
-            scanner.useDelimiter(NEW_NOTE_LABEL);
-            while (scanner.hasNext()) {
-                String line = scanner.next();
-                if (line.equals(deleteStr) && flag) {
-                    flag = false;
-                    continue;
-                }
-                writer.print(line + NEW_NOTE_LABEL);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            assert writer != null;
-            writer.close();
-        }
-
-        dataFile.delete();
-        temp.renameTo(dataFile);
-
     }
 
 }
