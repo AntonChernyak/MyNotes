@@ -31,12 +31,20 @@ public class CustomAdapter extends ArrayAdapter<Note> {
 
         TextView noteTitle = convertView.findViewById(R.id.item_note_title);
         TextView noteText = convertView.findViewById(R.id.item_note_text);
-        TextView nodeDate = convertView.findViewById(R.id.item_date);
+        TextView noteDate = convertView.findViewById(R.id.item_date);
 
         if (note != null) {
-            noteTitle.setText(note.getTitle());
-            noteText.setText(note.getText());
-            nodeDate.setText(note.getDate());
+            if (note.getTitle().isEmpty()) {
+                noteTitle.setVisibility(View.GONE);
+            } else noteTitle.setText(note.getTitle());
+
+            if (note.getText().isEmpty()) {
+                noteText.setVisibility(View.GONE);
+            } else noteText.setText(note.getText());
+
+            if (note.getDate().isEmpty()) {
+                noteDate.setVisibility(View.GONE);
+            } else noteDate.setText(note.getDate());
         }
 
         return convertView;

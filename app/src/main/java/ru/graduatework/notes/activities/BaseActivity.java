@@ -74,8 +74,8 @@ class BaseActivity extends AppCompatActivity {
     void onActivityCreateSetLocale() {
         SharedPreferences mySpinnersSharedPref = getSharedPreferences(SettingsActivity.SHARED_PREF_NAME, MODE_PRIVATE);
         int localePosition = mySpinnersSharedPref.getInt(SettingsActivity.LANG_SPINNER_VALUE, 0);
-
         Locale localeLang;
+
         switch (localePosition) {
             default:
             case RUS:

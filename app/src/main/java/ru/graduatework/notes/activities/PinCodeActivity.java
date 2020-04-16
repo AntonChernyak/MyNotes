@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 import ru.graduatework.notes.App;
 import ru.graduatework.notes.R;
 import ru.graduatework.notes.databinding.ActivityMainBinding;
@@ -22,6 +24,7 @@ public class PinCodeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // запрещаем поворот
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
         // выставим язык
         onActivityCreateSetLocale();
@@ -69,7 +72,7 @@ public class PinCodeActivity extends BaseActivity {
                     startActivity(intent);
                     PinCodeActivity.this.finish();
                 } else {
-                    Toast.makeText(PinCodeActivity.this, R.string.invalid_pin_code, Toast.LENGTH_LONG).show();
+                    Toast.makeText(PinCodeActivity.this, getResources().getString(R.string.invalid_pin_code), Toast.LENGTH_LONG).show();
                     pinBuilder.setLength(0);
                     afterTextChanged(pinBuilder);
                 }

@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorAddButton">#FFC107</color>
+    <color name="colorFullPinCircle">#505253</color>
+    <color name="colorEmptyPinCircleStroke">#6ab17b</color>
+    <color name="colorRoundPinButtonStroke">#505253</color>
+    <color name="colorRoundPinButtonClick">#A0A4A6</color>
 </resources>

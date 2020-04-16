@@ -38,9 +38,9 @@ public class SimpleKeystore implements Keystore {
 
         if (pin.length() == 4) {
             getSharedPref().edit().putString(PIN_KEY, pin).apply();
-            Toast.makeText(mContext, R.string.password_saved, Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.password_saved), Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(mContext, R.string.enter_four_digits, Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.enter_four_digits), Toast.LENGTH_LONG).show();
         }
     }
 

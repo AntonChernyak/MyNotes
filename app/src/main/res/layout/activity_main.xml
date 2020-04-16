@@ -8,11 +8,10 @@
 
     <TextView
         android:id="@+id/pinCodeTextView"
+        style="@style/TextAppearance.MaterialComponents.Headline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/enter_pin"
-        android:textSize="32sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -22,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:background="@drawable/ripple_effect_raised"
         android:onClick="pinNumberButtonOnClick"
         android:text="@string/button_1"
         app:layout_constraintEnd_toStartOf="@+id/button_two"
@@ -33,6 +33,7 @@
         android:id="@+id/button_two"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/ripple_effect_raised"
         android:onClick="pinNumberButtonOnClick"
         android:text="@string/button_2"
         app:layout_constraintEnd_toStartOf="@+id/button_three"
@@ -45,6 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
+        android:background="@drawable/ripple_effect_raised"
         android:onClick="pinNumberButtonOnClick"
         android:text="@string/button_3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,6 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/ripple_effect_raised"
         android:onClick="pinNumberButtonOnClick"
         android:text="@string/button_4"
         app:layout_constraintEnd_toStartOf="@+id/button_five"
@@ -69,6 +72,7 @@
         android:id="@+id/button_five"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/ripple_effect_raised"
         android:onClick="pinNumberButtonOnClick"
         android:text="@string/button_5"
         app:layout_constraintEnd_toStartOf="@+id/button_six"
@@ -81,6 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
+        android:background="@drawable/ripple_effect_raised"
         android:onClick="pinNumberButtonOnClick"
         android:text="@string/button_6"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/ripple_effect_raised"
         android:onClick="pinNumberButtonOnClick"
         android:text="@string/button_7"
         app:layout_constraintEnd_toStartOf="@+id/button_eight"
@@ -105,6 +111,7 @@
         android:id="@+id/button_eight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/ripple_effect_raised"
         android:onClick="pinNumberButtonOnClick"
         android:text="@string/button_8"
         app:layout_constraintEnd_toStartOf="@+id/button_nine"
@@ -117,6 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
+        android:background="@drawable/ripple_effect_raised"
         android:onClick="pinNumberButtonOnClick"
         android:text="@string/button_9"
         app:layout_constraintEnd_toEndOf="parent"
@@ -129,6 +137,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:background="@drawable/ripple_effect_raised"
         android:onClick="pinNumberButtonOnClick"
         android:text="@string/button_0"
         app:layout_constraintEnd_toEndOf="@+id/button_eight"
@@ -138,6 +147,7 @@
         android:id="@+id/button_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/ripple_effect_raised"
         android:text="@string/button_delete"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/button_nine"
@@ -148,14 +158,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.30" />
+        app:layout_constraintGuide_percent="0.35" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.20" />
 
     <ImageView
         android:id="@+id/pinCircleFirst"

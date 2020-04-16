@@ -110,9 +110,9 @@ public class ListOfNotesActivity extends BaseActivity {
 
             Note note = App.getNoteRepository().getNotes().get(position);
 
-            intent.putExtra(NOTE_TITLE_INTENT_KEY, note.getTitle());
+/*            intent.putExtra(NOTE_TITLE_INTENT_KEY, note.getTitle());
             intent.putExtra(NOTE_TEXT_INTENT_KEY, note.getText());
-            intent.putExtra(NOTE_DATE_INTENT_KEY, note.getDate());
+            intent.putExtra(NOTE_DATE_INTENT_KEY, note.getDate());*/
             intent.putExtra(NOTE_ID_KEY, note.getId());
 
             startActivity(intent);

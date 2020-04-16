@@ -66,14 +66,14 @@ public class FileNoteRepository implements NoteRepository {
         String dateAndTime = note.getDate();
         int id = note.getId();
 
-        if(note.getId() == 0) {
+        if (note.getId() == 0) {
             // зададим id по дате в секундах
             id = (int) ((new Date().getTime()) / 1000);
             note.setId(id);
         }
 
         if (noteTitle.isEmpty() && noteText.isEmpty() && dateAndTime.isEmpty()) {
-            Toast.makeText(mContext, R.string.empty_fields_notice, Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.empty_fields_notice), Toast.LENGTH_LONG).show();
         } else {
             // Запись в внутреннее хранилище
             File file = new File(mContext.getFilesDir(), String.valueOf(id));
@@ -81,7 +81,7 @@ public class FileNoteRepository implements NoteRepository {
                 writer.append(dateAndTime).append("\n");
                 writer.append(noteTitle).append("\n");
                 writer.append(noteText);
-                Toast.makeText(mContext, R.string.note_created_successfully, Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, mContext.getResources().getString(R.string.note_created_successfully), Toast.LENGTH_LONG).show();
             } catch (IOException e) {
                 e.printStackTrace();
             }

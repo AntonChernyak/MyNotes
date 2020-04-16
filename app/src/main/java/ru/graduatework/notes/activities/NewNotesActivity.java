@@ -18,8 +18,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
+import ru.graduatework.notes.App;
 import ru.graduatework.notes.R;
 import ru.graduatework.notes.databinding.ActivityNewNotesBinding;
+import ru.graduatework.notes.model.Note;
 
 public class NewNotesActivity extends BaseActivity {
 
@@ -121,9 +123,13 @@ public class NewNotesActivity extends BaseActivity {
     // получим данные из интента
     private void getIntentData() {
         Intent intent = getIntent();
-        String noteTitle = intent.getStringExtra(ListOfNotesActivity.NOTE_TITLE_INTENT_KEY);
-        String noteText = intent.getStringExtra(ListOfNotesActivity.NOTE_TEXT_INTENT_KEY);
-        String noteDate = intent.getStringExtra(ListOfNotesActivity.NOTE_DATE_INTENT_KEY);
+        int id = intent.getIntExtra(ListOfNotesActivity.NOTE_ID_KEY, 0);
+
+        Note note = App.getNoteRepository().getNoteById(id);
+
+        String noteTitle = note.getTitle();
+        String noteText = note.getText();
+        String noteDate = note.getDate();
 
         if (!"".equals(noteDate) && noteDate != null) {
             binding.deadLineCheckBox.setChecked(true);
@@ -134,6 +140,7 @@ public class NewNotesActivity extends BaseActivity {
         binding.noteTitleEditText.setText(noteTitle);
         binding.noteTextEditText.setText(noteText);
         binding.dateTimeEditText.setText(noteDate);
+
     }
 
 }
