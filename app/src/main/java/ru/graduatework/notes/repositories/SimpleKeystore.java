@@ -21,11 +21,6 @@ public class SimpleKeystore implements Keystore {
         return mContext.getSharedPreferences(PIN_SHARED_PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    @Override
-    public boolean hashPin() {
-        return false;
-    }
-
     // Проверяем соответсвтвие введёноого текста паролю, сохранённому в памяти
     @Override
     public boolean checkPin(String enteredPin) {

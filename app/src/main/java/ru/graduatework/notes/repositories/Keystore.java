@@ -1,9 +1,8 @@
 package ru.graduatework.notes.repositories;
 
 public interface Keystore {
-    boolean hashPin();
 
-    boolean checkPin(String pin);
+    boolean checkPin(String pin) throws Exception;
 
     void saveNew(String pin);
 }

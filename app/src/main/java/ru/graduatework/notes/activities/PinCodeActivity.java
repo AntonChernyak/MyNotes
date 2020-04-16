@@ -40,16 +40,20 @@ public class PinCodeActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         // Проверка первого входа по наличию пароля
-        if (App.getKeystore().checkPin("")) {
-            if (firstPinEnteredLabel) {
-                // выводим нужную активность
-                firstPinEnteredLabel = false;
-                Intent intent = new Intent(PinCodeActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            } else {
-                // если пользователь вернулся на этот экран и пароль до сих пор не введён, то закрываем приложение
-                finish();
+        try {
+            if (App.getKeystore().checkPin("")) {
+                if (firstPinEnteredLabel) {
+                    // выводим нужную активность
+                    firstPinEnteredLabel = false;
+                    Intent intent = new Intent(PinCodeActivity.this, SettingsActivity.class);
+                    startActivity(intent);
+                } else {
+                    // если пользователь вернулся на этот экран и пароль до сих пор не введён, то закрываем приложение
+                    finish();
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -60,7 +64,7 @@ public class PinCodeActivity extends BaseActivity {
     }
 
     // Логика кнопок с цифрами
-    public void pinNumberButtonOnClick(View view) {
+    public void pinNumberButtonOnClick(View view) throws Exception {
         Button btn = (Button) view;
         if (pinBuilder.length() <= 3) {
             pinBuilder.append(btn.getText());
