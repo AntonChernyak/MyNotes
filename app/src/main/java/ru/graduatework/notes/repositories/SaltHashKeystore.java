@@ -17,7 +17,7 @@ import ru.graduatework.notes.R;
 public class SaltHashKeystore implements Keystore {
 
     //Чем больше число итераций, тем дороже вычисление хэша для нас, а также для злоумышленника.
-    private static final int iterations = 20 * 500;
+    private static final int iterations = 20 * 100;
     private static final int saltLen = 32;
     private static final int desiredKeyLen = 256;
 

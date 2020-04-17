@@ -24,9 +24,6 @@ public class ListOfNotesActivity extends BaseActivity {
     private ActivityListOfNotesBinding binding;
     private long back_pressed;
     private Toast backToast;
-    public static final String NOTE_TITLE_INTENT_KEY = "note_title";
-    public static final String NOTE_TEXT_INTENT_KEY = "note_text";
-    public static final String NOTE_DATE_INTENT_KEY = "note_date";
     public static final String NOTE_ID_KEY = "note_id_key";
 
     @Override
@@ -107,14 +104,8 @@ public class ListOfNotesActivity extends BaseActivity {
         // обработаем короткое нажатие на элемент списка
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(ListOfNotesActivity.this, NewNotesActivity.class);
-
             Note note = App.getNoteRepository().getNotes().get(position);
-
-/*            intent.putExtra(NOTE_TITLE_INTENT_KEY, note.getTitle());
-            intent.putExtra(NOTE_TEXT_INTENT_KEY, note.getText());
-            intent.putExtra(NOTE_DATE_INTENT_KEY, note.getDate());*/
             intent.putExtra(NOTE_ID_KEY, note.getId());
-
             startActivity(intent);
         });
 

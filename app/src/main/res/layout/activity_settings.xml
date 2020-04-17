@@ -9,6 +9,7 @@
 
     <TextView
         android:id="@+id/textView"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="4dp"
@@ -21,6 +22,7 @@
 
     <EditText
         android:id="@+id/newPinCodeEditText"
+        style="@style/TextAppearance.MaterialComponents.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -38,6 +40,7 @@
 
     <Button
         android:id="@+id/savePinButton"
+        style="@style/TextAppearance.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/saveBtn"
@@ -68,6 +71,7 @@
 
     <TextView
         android:id="@+id/textView2"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -81,6 +85,7 @@
 
     <Button
         android:id="@+id/saveLanguageButton"
+        style="@style/TextAppearance.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
