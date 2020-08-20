@@ -32,7 +32,7 @@
 * Если пин-код не был задан (первый запуск приложения) – осуществляется переход на экран с настройками.
 
 ## Экран со списком заметок
-<img src="https://i.imgur.com/IO813Kh.png" width="300"> <img src="https://i.imgur.com/8rJY1Z8.png" width="300">
+<img src="https://i.imgur.com/6nwGwEt.png" width="300"> <img src="https://i.imgur.com/8rJY1Z8.png" width="300">
 
 **Экран состоит из:**
 * Списка заметок в виде карточек (ListView со своим адаптером + CardView);
